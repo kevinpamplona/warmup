@@ -53,6 +53,7 @@ class TestView(View):
 			return HttpResponse(content=data_out, content_type='application/json', status=200)
 		except CalledProcessError as error_result:
 			regex = re.compile('[EF.]{2,}')
+			print "******" + error_result.output 
 			match = regex.match(error_result.output).group()
 			totalTests = len(match)
 			failures = 0
