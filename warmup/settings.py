@@ -57,6 +57,9 @@ WSGI_APPLICATION = 'warmup.wsgi.application'
 
 import dj_database_url 
 DATABASES = {'default': dj_database_url.config()}
+import sys
+if 'test' in sys.argv:
+    DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
