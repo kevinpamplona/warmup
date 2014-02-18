@@ -13,6 +13,16 @@ class HandlerView(View):
 
 		from os import curdir, sep
 		f = open(curdir + sep + request.path)
+
+		if request.path.endswith(".html"):
+			_content_type = 'text/html'
+		elif request.path.endswith(".css"):
+			_content_type = 'text/css'
+		elif request.path.endswith(".js"):
+			_content_type = 'text/javascript'
+		else:
+			assert False
+
 		send_out = HttpResponse(content=f.read(), content_type='text/html', status=200)
 		f.close()
 		return send_out
