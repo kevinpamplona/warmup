@@ -23,7 +23,7 @@ class HandlerView(View):
 		else:
 			assert False
 
-		send_out = HttpResponse(content=f.read(), content_type='text/html', status=200)
+		send_out = HttpResponse(content=f.read(), content_type=_content_type, status=200)
 		f.close()
 		return send_out
 
