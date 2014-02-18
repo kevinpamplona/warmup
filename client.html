@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css" href="client.css">
   </head>
 
   <center>
@@ -36,14 +37,10 @@ $('#login-password').val("")
 $('#login-message').html("Please enter your credentials below")
 $('#welcome-message').html("You should never see this text");
 
-/* setup the page so that only one of the forms is shown */
 $(document).ready(function() {
    show_login_page();
  });
 
-/* Note: These two functions are deliberately written to ignore the starting
-   state.  This makes them slightly slower, but has the side effect of 
-   restoring any invariant that gets accidentally broken.*/
 function show_login_page(message) {
   if(! message) message = "Please enter your credentials below";
   $('#welcome-page').hide()
@@ -53,6 +50,61 @@ function show_login_page(message) {
   $('#login-page').show()
 }
 
+function show_welcome_page(user, count) {
+   $('#login-page').hide();
+   $('#welcome-page').show();
+   $('#welcome-message').html("Welcome "+user+"<br>You have logged in "+count+" times.");
+}
+
+function handle_login_response(data, user) {
+  if( data.errCode > 0 ) {
+     c = data.count;
+     show_welcome_page(user, c);
+  } else {
+     if( debug_flag ) {
+        if( data.errCode != ERR_BAD_CREDENTIALS ) {
+           alert( 'Illegal error code encounted for this state');
+        }
+     }
+     show_login_page( get_message_for_errcode(data.errCode) );  
+  }
+}
+
+function handle_add_user_response(data, user) {
+  if( data.errCode > 0 ) {
+     c = data.count;
+     show_welcome_page(user, c);
+  } else {
+     if( debug_flag ) {
+        if( data.errCode != ERR_BAD_USERNAME && data.errCode != ERR_USER_EXISTS ) {
+           alert( 'Illegal error code encounted for this state');
+        }
+     }
+     show_login_page( get_message_for_errcode(data.errCode) );  
+  }
+}
+
+$('#login-button').click(function() {
+   username = $('#login-username').val()
+   password = $('#login-password').val()
+   json_request("/users/login", { user: username, password: password }, function(data) { return handle_login_response(data, username); }, function(err) { alert('error occurred on request'); });
+
+   return false;
+});
+
+$('#add-user-button').click(function() {
+   username = $('#login-username').val()
+   password = $('#login-password').val()
+   json_request("/users/add", { user: username, password: password }, function(data) { return handle_add_user_response(data, username); }, function(err) {alert('error occurred on request'); });
+
+   return false;
+});
+
+$('#logout-button').click(function() {
+  show_login_page();
+
+  return false;
+});
 
 </script>
 
