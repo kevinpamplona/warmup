@@ -10,7 +10,12 @@ import models
 
 class HandlerView(View):
 	def get(self, request, *args, **kwargs):
-		return HttpResponse('Hello, GET request!\n')
+
+		from os import curdir, sep
+		f = open(curdir + sep + request.path)
+		send_out = HttpResponse(content=f.read(), content_type='text/html', status=200)
+		f.close()
+		return send_out
 
 	def post(self, request, *args, **kwargs):
 		data_in = json.loads(request.body)
