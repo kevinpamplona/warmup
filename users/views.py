@@ -34,6 +34,7 @@ class HandlerView(View):
 		return HttpResponse(content=j_resp, content_type='application/json', status=200)
 
 
+
 class ResetView(View):
 	def post(self, request, *args, **kwargs):
 		models.g_users.TESTAPI_resetFixture()

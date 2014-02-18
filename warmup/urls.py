@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^users/add$', HandlerView.as_view(), name='my-view'),
     url(r'^TESTAPI/resetFixture$', ResetView.as_view(), name='reset-view'),
     url(r'^TESTAPI/unitTests$', TestView.as_view(), name='test-view'),
+    url(r'^client.html$', HandlerView.as_view(), name='my-view'),
 )
